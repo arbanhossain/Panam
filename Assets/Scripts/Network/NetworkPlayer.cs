@@ -9,7 +9,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
     public TextMeshProUGUI PlayerNicknameTM;
 
-    [Networked(OnChanged = nameof(OnNicknameChanged))]
+    [Networked
+    (OnChanged = nameof(OnNicknameChanged))]
     public NetworkString<_16> Nickname { get; set; }
 
     public static NetworkPlayer Local { get; set; }
