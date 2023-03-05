@@ -7,12 +7,17 @@ using TMPro;
 
 public class MessageHandler : MonoBehaviour
 {
+    [HideInInspector]
+    public NetworkInGameMessages _NetworkInGameMessages;
+
     public int MaxMessages = 25;
 
     public GameObject ChatPanel;
     public TMP_Text TextObject;
 
     public TMP_InputField InputField;
+
+    public Color ChatColor, SystemColor;
 
     [SerializeField]
     List<Message> MessageList = new List<Message>();
@@ -25,28 +30,36 @@ public class MessageHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (InputField.text != "") {
-            if (Input.GetKeyDown(KeyCode.Return)) {
-                SendMessageToChat(InputField.text);
-                InputField.text = "";
-            }
-        } else {
-            if (InputField.isFocused) {
-                if (Input.GetKeyDown(KeyCode.Return)) {
-                    InputField.text = "";
-                }
-            }
+        // if (InputField.text != "" && InputField.isFocused) {
+        //     if (Input.GetKeyDown(KeyCode.Return)) {
+        //         SendMessageToChat(InputField.text);
+        //         InputField.text = "";
+        //     }
+        // }
+
+        if (Input.GetKeyDown(KeyCode.Return) && !InputField.isFocused) {
+            InputField.ActivateInputField();
         }
 
-        if (!InputField.isFocused) {
-            if(Input.GetKeyDown(KeyCode.Space)) {
-                SendMessageToChat("Pressed Space");
-            }
+        if (Input.GetKeyDown(KeyCode.Escape) && InputField.isFocused) {
+            InputField.DeactivateInputField();
+
         }
         
     }
 
-    public void SendMessageToChat(string Text) {
+    void OnEnable() {
+        InputField.onEndEdit.AddListener(delegate {
+            _NetworkInGameMessages.SendInGameMessages(NetworkPlayer.Local.Nickname.ToString(), InputField.text);
+            InputField.text = "";
+        });
+    }
+
+    public void ReceiveMessageFromRpc(string Text, Message.Type MessageType) {
+        SendMessageToChat(Text, MessageType);
+    }
+
+    public void SendMessageToChat(string Text, Message.Type MessageType) {
         if (MessageList.Count >= MaxMessages) {
             Destroy(MessageList[0]._Text.gameObject);
             MessageList.RemoveAt(0);
@@ -61,11 +74,4 @@ public class MessageHandler : MonoBehaviour
         // NewText.text = NewMessage.MessageText;
         MessageList.Add(NewMessage);
     }
-}
-
-[System.Serializable]
-public class Message
-{
-    public string MessageText;
-    public TMP_Text _Text;
 }

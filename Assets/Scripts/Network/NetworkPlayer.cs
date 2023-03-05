@@ -7,6 +7,10 @@ using Fusion;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
+    bool PublicJoinedMessageSent = false;
+
+    NetworkInGameMessages _NetworkInGameMessages;
+
     public TextMeshProUGUI PlayerNicknameTM;
 
     [Networked
@@ -16,6 +20,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public static NetworkPlayer Local { get; set; }
 
     public Transform PlayerModel;
+
+    void Awake() {
+        _NetworkInGameMessages = GetComponent<NetworkInGameMessages>();    
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +54,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     }
 
     public void PlayerLeft(PlayerRef player) {
+        if (Object.HasStateAuthority) {
+            _NetworkInGameMessages.RPC_InGameMessage($"<color=green><b>{Nickname}</b> has left the game.</color>");
+        }
+
         if (player == Object.InputAuthority) {
             Runner.Despawn(Object);
         }
@@ -67,5 +79,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public void RPC_SetNickname(string _Nickname, RpcInfo Info = default) {
         Debug.Log($"[RPC] SetNickname {_Nickname}");
         this.Nickname = _Nickname;
+
+        if (!PublicJoinedMessageSent) {
+            PublicJoinedMessageSent = true;
+            _NetworkInGameMessages.RPC_InGameMessage($"<color=green><b>{Nickname}</b> has joined the game.</color>");
+        }
     }
 }
