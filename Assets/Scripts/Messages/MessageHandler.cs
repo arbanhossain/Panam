@@ -50,6 +50,7 @@ public class MessageHandler : MonoBehaviour
 
     void OnEnable() {
         InputField.onEndEdit.AddListener(delegate {
+            if (InputField.text == "") return;
             _NetworkInGameMessages.SendInGameMessages(NetworkPlayer.Local.Nickname.ToString(), InputField.text);
             InputField.text = "";
         });
