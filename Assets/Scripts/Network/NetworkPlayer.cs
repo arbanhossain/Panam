@@ -13,6 +13,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public TextMeshProUGUI PlayerNicknameTM;
 
+    [SerializeField]
+    OVRCameraRig OVRCam;
+
     [Networked
     (OnChanged = nameof(OnNicknameChanged))]
     public NetworkString<_16> Nickname { get; set; }
@@ -37,13 +40,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             Utils.SetRenderLayerInChildren(PlayerModel, LayerMask.NameToLayer("LocalPlayerModel"));
 
-            Camera.main.gameObject.SetActive(false);
+            OVRCam.gameObject.SetActive(false);
 
             RPC_SetNickname(PlayerPrefs.GetString("PlayerNickname"));
 
             Debug.Log($"Local Player Spawned");
         } else {
-            Camera LocalCam = GetComponentInChildren<Camera>();
+            OVRCameraRig LocalCam = GetComponentInChildren<OVRCameraRig>();
             LocalCam.enabled = false;
 
             AudioListener LocalAudioListener = GetComponentInChildren<AudioListener>();
