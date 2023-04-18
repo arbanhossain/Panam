@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 using Fusion;
@@ -14,7 +15,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public TextMeshProUGUI PlayerNicknameTM;
 
     [SerializeField]
-    OVRCameraRig OVRCam;
+    Camera LeftCam;
+    [SerializeField]
+    Camera RightCam;
+    [SerializeField]
+    Camera CenterCam;
+
 
     [Networked
     (OnChanged = nameof(OnNicknameChanged))]
@@ -31,7 +37,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log(Application.platform);
     }
 
     public override void Spawned() {
@@ -40,14 +46,42 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             Utils.SetRenderLayerInChildren(PlayerModel, LayerMask.NameToLayer("LocalPlayerModel"));
 
-            OVRCam.gameObject.SetActive(false);
+            // if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor){
+            //     FPSCam.gameObject.SetActive(false);
+            // } else if (Application.platform == RuntimePlatform.Android) {
+            //     OVRCam.gameObject.SetActive(false);
+            // }
+
+
+
+            // Camera.main.gameObject.SetActive(false); // For PC Build
+
+            // For VR Build
+            // LeftCam.gameObject.SetActive(false);
+            // RightCam.gameObject.SetActive(false);
+            // CenterCam.gameObject.SetActive(false);
 
             RPC_SetNickname(PlayerPrefs.GetString("PlayerNickname"));
 
             Debug.Log($"Local Player Spawned");
         } else {
-            OVRCameraRig LocalCam = GetComponentInChildren<OVRCameraRig>();
-            LocalCam.enabled = false;
+            // var LocalCam;
+            // if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor){
+            //     Camera LocalCam = GetComponentInChildren<Camera>();
+            //     LocalCam.enabled = false;
+            // } else if (Application.platform == RuntimePlatform.Android) {
+            //     OVRCameraRig LocalCam = GetComponentInChildren<OVRCameraRig>();
+            //     LocalCam.enabled = false;
+            // }
+
+            // For PC Build
+            // Camera LocalCam = GetComponentInChildren<Camera>();
+            // LocalCam.enabled = false;
+
+            // For VR Build
+            LeftCam.enabled = false;
+            RightCam.enabled = false;
+            CenterCam.enabled = false;
 
             AudioListener LocalAudioListener = GetComponentInChildren<AudioListener>();
             LocalAudioListener.enabled = false;
@@ -64,6 +98,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         if (player == Object.InputAuthority) {
             Runner.Despawn(Object);
         }
+
+        SceneManager.LoadScene(0); 
     }
 
     static void OnNicknameChanged(Changed<NetworkPlayer> _Changed) {

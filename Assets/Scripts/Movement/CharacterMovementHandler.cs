@@ -11,6 +11,7 @@ public class CharacterMovementHandler : NetworkBehaviour
     Vector2 _ViewInput;
     float CameraRotationX = 0f;
 
+    [SerializeField]
     Camera LocalCamera;
 
     // Start is called before the first frame update
@@ -21,7 +22,7 @@ public class CharacterMovementHandler : NetworkBehaviour
 
     void Awake() {
         _NetworkControllerModified = GetComponent<NetworkCharacterControllerPrototypeModified>();
-        LocalCamera = GetComponentInChildren<Camera>();
+        // LocalCamera = GetComponentInChildren<Camera>();
     }
 
     // Update is called once per frame
@@ -30,7 +31,8 @@ public class CharacterMovementHandler : NetworkBehaviour
         CameraRotationX += _ViewInput.y * Time.deltaTime * _NetworkControllerModified.VerticalRotationSpeed;
         CameraRotationX = Mathf.Clamp(CameraRotationX, -90, 90); // Lock vertical aim
 
-        LocalCamera.transform.localRotation = Quaternion.Euler(CameraRotationX, 0, 0);
+        if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+            LocalCamera.transform.localRotation = Quaternion.Euler(CameraRotationX, 0, 0);
     }
 
     public override void FixedUpdateNetwork() {
