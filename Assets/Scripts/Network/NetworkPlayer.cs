@@ -46,13 +46,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             Utils.SetRenderLayerInChildren(PlayerModel, LayerMask.NameToLayer("LocalPlayerModel"));
 
-            // if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor){
-            //     FPSCam.gameObject.SetActive(false);
-            // } else if (Application.platform == RuntimePlatform.Android) {
-            //     OVRCam.gameObject.SetActive(false);
-            // }
-
-
             // For PC Build
             Camera.main.gameObject.SetActive(false);
 
@@ -60,15 +53,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             Debug.Log($"Local Player Spawned");
         } else {
-            // var LocalCam;
-            // if(Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor){
-            //     Camera LocalCam = GetComponentInChildren<Camera>();
-            //     LocalCam.enabled = false;
-            // } else if (Application.platform == RuntimePlatform.Android) {
-            //     OVRCameraRig LocalCam = GetComponentInChildren<OVRCameraRig>();
-            //     LocalCam.enabled = false;
-            // }
-
             // For PC Build
             // Camera LocalCam = GetComponentInChildren<Camera>();
             // LocalCam.enabled = false;
