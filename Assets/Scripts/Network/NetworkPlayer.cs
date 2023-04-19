@@ -21,6 +21,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField]
     Camera CenterCam;
 
+    [SerializeField]
+    GameObject MyCamera;
 
     [Networked
     (OnChanged = nameof(OnNicknameChanged))]
@@ -41,7 +43,43 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     }
 
     public override void Spawned() {
+        GameObject[] _Players = GameObject.FindGameObjectsWithTag("Player");
+        Debug.Log($"Players: {_Players.Length} (Local: {Object.HasInputAuthority})");
+
         if (Object.HasInputAuthority) {
+            Local = this;
+
+            Utils.SetRenderLayerInChildren(PlayerModel, LayerMask.NameToLayer("LocalPlayerModel"));
+
+            // For PC Build
+            // Camera.main.gameObject.SetActive(false);
+
+            GameObject Avatar = transform.Find("Avatar").gameObject;
+            GameObject _MyCamera = Instantiate(MyCamera, transform.position, transform.rotation);
+            _MyCamera.transform.parent = Avatar.transform;
+
+            RPC_SetNickname(PlayerPrefs.GetString("PlayerNickname"));
+
+            Debug.Log($"Local Player Spawned");
+        } else {
+            // For PC Build
+            // Camera LocalCam = GetComponentInChildren<Camera>();
+            // LocalCam.enabled = false;
+
+            // For VR Build
+            // LeftCam.enabled = false;
+            // RightCam.enabled = false;
+            // CenterCam.enabled = false;
+
+            // AudioListener LocalAudioListener = GetComponentInChildren<AudioListener>();
+            // LocalAudioListener.enabled = false;
+
+            Debug.Log($"Remote Player Spawned");
+        }
+
+        return;
+
+        if (Object.HasInputAuthority && false) {
             Local = this;
 
             Utils.SetRenderLayerInChildren(PlayerModel, LayerMask.NameToLayer("LocalPlayerModel"));

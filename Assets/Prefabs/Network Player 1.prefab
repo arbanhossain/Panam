@@ -127,8 +127,8 @@ GameObject:
   - component: {fileID: 1246704565363124700}
   - component: {fileID: 5451677639464177446}
   m_Layer: 0
-  m_Name: Network Player
-  m_TagString: Player
+  m_Name: Network Player 1
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
   LeftCam: {fileID: 0}
   RightCam: {fileID: 0}
   CenterCam: {fileID: 0}
-  MyCamera: {fileID: 6515565023581074560, guid: da0794d9351e85b4eac43698706ee92a, type: 3}
+  OVRCameraRig: {fileID: 0}
   _Nickname:
     _length: 0
     _data:
@@ -218,7 +218,7 @@ MonoBehaviour:
   AoiPositionSource: {fileID: 0}
   Flags: 2305
   NetworkGuid:
-    RawGuidValue: 90428341b2a72b349aab1a45a9dddfd9
+    RawGuidValue: 87bb85a262e1abc43b3c99ff146b6daf
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 5653234867583224660}
@@ -807,7 +807,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6515565023581074560, guid: da0794d9351e85b4eac43698706ee92a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
