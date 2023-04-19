@@ -47,7 +47,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Utils.SetRenderLayerInChildren(PlayerModel, LayerMask.NameToLayer("LocalPlayerModel"));
 
             // For PC Build
-            Camera.main.gameObject.SetActive(false);
+            // Camera.main.gameObject.SetActive(false);
 
             RPC_SetNickname(PlayerPrefs.GetString("PlayerNickname"));
 
