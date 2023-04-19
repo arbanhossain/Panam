@@ -53,13 +53,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             // }
 
 
-
-            // Camera.main.gameObject.SetActive(false); // For PC Build
-
-            // For VR Build
-            // LeftCam.gameObject.SetActive(false);
-            // RightCam.gameObject.SetActive(false);
-            // CenterCam.gameObject.SetActive(false);
+            // For PC Build
+            Camera.main.gameObject.SetActive(false);
 
             RPC_SetNickname(PlayerPrefs.GetString("PlayerNickname"));
 
@@ -99,7 +94,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Runner.Despawn(Object);
         }
 
-        SceneManager.LoadScene(0); 
+        // SceneManager.LoadScene(0); 
     }
 
     static void OnNicknameChanged(Changed<NetworkPlayer> _Changed) {
